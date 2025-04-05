@@ -129,7 +129,7 @@ export default function Home() {
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between p-6 bg-red-300`}>
       <NavbarDemo />
-      <div className="my-30 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
+      <div className="my-20 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
         <form onSubmit={handleSubmit} className="mt-8 w-full mb-8">
           <div className="flex flex-col gap-4 bg-white/40 bg-cover bg-center rounded-2xl p-4">
             <textarea
@@ -169,7 +169,7 @@ export default function Home() {
             {complexityInfo && (
           <div className={`mt-4 w-full ${complexityInfo.response ? "bg-white/40" : "bg-red-400"} p-4 rounded-3xl pt-4`}>
             <h3 className={`mx-2 text-black text-2xl font-semibold mb-2`}>
-                  {complexityInfo.response ? 'Complexity Analysis:' : 'Error:  please provide correct code snippet!!'}
+                  {complexityInfo.response ? 'Complexity Analysis:' : 'Error:  please enter correct code snippet!!'}
                 </h3>
                 {complexityInfo.response ? (
                   <div className='flex-col bg-red-100 rounded-2xl p-4'>

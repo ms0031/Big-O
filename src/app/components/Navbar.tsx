@@ -45,7 +45,7 @@ export function NavbarDemo() {
         </NavBody>
 
         {/* Mobile Navigation */}
-        <MobileNav className="bg-white/80 dark:bg-neutral-950/80">
+        <MobileNav className="bg-white/40 dark:bg-neutral-950/80 ">
           <MobileNavHeader>
             <NavbarLogo />
             <MobileNavToggle
@@ -57,6 +57,7 @@ export function NavbarDemo() {
           <MobileNavMenu
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
+            className="bg-red-100/80 backdrop-blur-lg rounded-3xl justify-self-end"
           >
             {navItems.map((item, idx) => (
               <a
@@ -74,14 +75,14 @@ export function NavbarDemo() {
                 variant="primary"
                 className="w-full"
               >
-                Login
+                Info
               </NavbarButton>
               <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
               >
-                Book a call
+                GitHub
               </NavbarButton>
             </div>
           </MobileNavMenu>
