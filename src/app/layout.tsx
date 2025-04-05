@@ -12,11 +12,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Big-O - Code Complexity Analysis Tool',
     description: 'Analyze the time and space complexity of your code snippets instantly',
-    url: 'https://big-o-analyzer.vercel.app',
+    url: 'https://big-o-bot.vercel.app/',
     siteName: 'Big O Analyzer',
     images: [
       {
-        url: '/Bigo-2.png', // Updated to match the actual image name
+        // Make sure this exactly matches the case of your actual file
+        url: '/bigo-2.png', // Check if this should be lowercase
         width: 1200,
         height: 630,
         alt: 'Big O Analyzer',
@@ -29,7 +30,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Big O Analyzer - Code Complexity Analysis Tool',
     description: 'Analyze the time and space complexity of your code snippets instantly',
-    images: ['/Bigo-2.png'], // Updated to match the actual image name
+    // Make sure this exactly matches the case of your actual file
+    images: ['/bigo-2.png'], // Check if this should be lowercase
   },
   robots: {
     index: true,
