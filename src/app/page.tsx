@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Inter } from 'next/font/google';
 import { useEffect } from 'react';
 import { NavbarDemo } from './components/Navbar';
 import { useRef } from 'react';
@@ -76,9 +75,7 @@ export default function Home() {
         throw new Error(`Failed to get response: ${response.status}`);
       }
       
-      const content = data.choices?.[0]?.message?.content || 'No response received';
-      console.log('Response from OpenRouter:', data);
-      
+      const content = data.choices?.[0]?.message?.content || 'No response received'; 
       // Try to extract JSON complexity info from the response
       try {
         // Look for JSON pattern in the response
@@ -96,10 +93,8 @@ export default function Home() {
           // Remove the JSON part from the answer
           const cleanAnswer = content.replace(jsonMatch[0], '').trim();
           setAnswer(cleanAnswer);
-          console.log(cleanAnswer);
         } else {
           setAnswer(content);
-          console.log(content);
         }
       } catch (jsonError) {
         console.error('Error parsing complexity info:', jsonError);
