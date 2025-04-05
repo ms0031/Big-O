@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { useEffect } from 'react';
 import { NavbarDemo } from './components/Navbar';
+import { useRef } from 'react';
 const inter = Inter({ subsets: ['latin'] });
-
 export default function Home() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -119,17 +119,30 @@ export default function Home() {
     }
   };
   // Add this useEffect to scroll to bottom when complexityInfo or answer changes
+  // Add a ref to track if this is the initial render
+  const isInitialRender = useRef(true);
+  
+  // Modified useEffect to avoid scrolling on initial render/refresh
   useEffect(() => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
-    });
+    // Skip scrolling on the initial render (page refresh)
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+    
+    // Only scroll when we have actual content changes after user interaction
+    if (complexityInfo || answer) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   }, [complexityInfo, answer]);
   
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between p-6 bg-red-300`}>
       <NavbarDemo />
-      <div className="my-20 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
+      <div className="my-38 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
         <form onSubmit={handleSubmit} className="mt-8 w-full mb-8">
           <div className="flex flex-col gap-4 bg-white/40 bg-cover bg-center rounded-2xl p-4">
             <textarea

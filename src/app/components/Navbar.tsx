@@ -33,14 +33,14 @@ export function NavbarDemo() {
 
   return (
     <div className="fixed  top-0 left-0 right-0 z-50 w-full  bg-white/40 shadow-sm">
-      <Navbar className="fixed inset-x-0 top-6">
+      <Navbar className="fixed inset-x-0 top-8">
         {/* Desktop Navigation */}
         <NavBody className="bg-white/40 backdrop-blur-3xl dark:bg-neutral-950/80">
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Info</NavbarButton>
-            <NavbarButton variant="primary">GitHub</NavbarButton>
+            <NavbarButton variant="blue" href="https://www.linkedin.com/in/ms0031/">LinkedIn</NavbarButton>
+            <NavbarButton variant="dark" href="https://github.com/ms0031/">GitHub</NavbarButton>
           </div>
         </NavBody>
 
@@ -72,14 +72,16 @@ export function NavbarDemo() {
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
+                variant="blue"
+                href="https://www.linkedin.com/in/ms0031/"
                 className="w-full"
-              >
-                Info
+              >  
+                LinkedIn
               </NavbarButton>
               <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
+                variant="dark"
+                href="https://github.com/ms0031/"
                 className="w-full"
               >
                 GitHub
