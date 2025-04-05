@@ -5,7 +5,6 @@ import { Inter } from 'next/font/google';
 import { useEffect } from 'react';
 import { NavbarDemo } from './components/Navbar';
 import { useRef } from 'react';
-const inter = Inter({ subsets: ['latin'] });
 export default function Home() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
