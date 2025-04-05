@@ -144,7 +144,7 @@ export default function Home() {
       <NavbarDemo />
       <div className="my-38 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
         <form onSubmit={handleSubmit} className="mt-8 w-full mb-8">
-          <div className="flex flex-col gap-4 bg-white/40 bg-cover bg-center rounded-2xl p-4">
+          <div className="flex flex-col gap-4  bg-white/40 bg-cover bg-center rounded-2xl p-4">
             <textarea
               value={question}
               onChange={(e) => {
@@ -153,7 +153,7 @@ export default function Home() {
               }}
               placeholder="Enter code snippet..."
               className={`${flag ? 'field-sizing-content' : 'h-90'} p-4 border-0
- border-black bg-red-100 rounded-2xl resize-none text-black`}
+ border-black bg-red-100 rounded-2xl resize-none text-black focus:outline-none focus:ring-2 focus:ring-red-400/75 focus:border-red-400/75 transition-all duration-200`}
               disabled={isLoading}
             />
             <button
