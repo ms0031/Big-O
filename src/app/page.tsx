@@ -1,103 +1,142 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import { Inter } from 'next/font/google';
+import { useEffect } from 'react';
+import { NavbarDemo } from './components/Navbar';
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  // Change the initial state to include a default false value for response
+  const [complexityInfo, setComplexityInfo] = useState<{response: boolean, timeComplexity: string, spaceComplexity: string} | null>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [flag,setFlag] = useState(false);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!question.trim()) return;
+    
+    // Add complexity request to the question
+    const enhancedQuestion = `${question}\n\nexplain the time complexity in json format {'response'='true/false','time-complexity'='','space-complexity'=''} and nothing else , response = 'true' if the answer is fetched else false`;
+    
+    setIsLoading(true);
+    setError('');
+    setComplexityInfo(null);
+    
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: enhancedQuestion }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+      
+      const data = await response.json();
+      const content = data.choices[0]?.message?.content || 'No response received';
+      
+      // Try to extract JSON complexity info from the response
+      try {
+        // Look for JSON pattern in the response
+        const jsonMatch = content.match(/\{.*"response".*"time-complexity".*"space-complexity".*\}/);
+        if (jsonMatch) {
+          // Replace single quotes with double quotes for valid JSON
+          const jsonStr = jsonMatch[0].replace(/'/g, '"');
+          const complexityData = JSON.parse(jsonStr);
+          setComplexityInfo({
+            response: complexityData.response === 'true',
+            timeComplexity: complexityData['time-complexity'],
+            spaceComplexity: complexityData['space-complexity']
+          });
+          
+          // Remove the JSON part from the answer
+          const cleanAnswer = content.replace(jsonMatch[0], '').trim();
+          setAnswer(cleanAnswer);
+          console.log(cleanAnswer);
+        } else {
+          setAnswer(content);
+          console.log(content);
+        }
+      } catch (jsonError) {
+        console.error('Error parsing complexity info:', jsonError);
+        setAnswer(content);
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      setError('Failed to get a response. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  // Add this useEffect to scroll to bottom when complexityInfo or answer changes
+  useEffect(() => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, [complexityInfo, answer]);
+  
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <main className={`flex min-h-screen flex-col items-center justify-between p-6 bg-red-300`}>
+      <NavbarDemo />
+      <div className="my-30 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
+        <form onSubmit={handleSubmit} className="mt-8 w-full mb-8">
+          <div className="flex flex-col gap-4 bg-white/40 bg-cover bg-center rounded-2xl p-4">
+            <textarea
+              value={question}
+              onChange={(e) => {
+                setQuestion(e.target.value);
+                setFlag(true);
+              }}
+              placeholder="Enter code snippet..."
+              className={`${flag ? 'field-sizing-content' : 'h-90'} p-4 border-0
+ border-black bg-red-100 rounded-2xl resize-none text-black`}
+              disabled={isLoading}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className=" disabled:cursor-not-allowed cursor-pointer shadow-2xl border-0 border-black bg-red-400/95 hover:bg-red-500/90 text-black font-bold py-2 px-4 rounded-2xl "
+            >
+              {isLoading ? (
+                <>
+                  <svg className="mr-3 h-5 w-5 inline animate-spin text-black/75" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="6"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Getting Answer...
+                </>
+              ) : 'Get Answer'}
+            </button>
+          </div>
+        </form>
+        
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+            {complexityInfo && (
+          <div className={`mt-4 w-full ${complexityInfo.response ? "bg-white/40" : "bg-red-400"} p-4 rounded-3xl pt-4`}>
+            <h3 className={`mx-2 text-black text-2xl font-semibold mb-2`}>
+                  {complexityInfo.response ? 'Complexity Analysis:' : 'Error Try Again ...'}
+                </h3>
+                {complexityInfo.response ? (
+                  <div className='flex-col bg-red-100 rounded-2xl p-4'>
+                    <p className='mx-8 text-black text-xl'><strong>Time Complexity:</strong> {complexityInfo.timeComplexity || 'Not provided'}</p>
+                    <p className='mx-8 text-black text-xl'><strong>Space Complexity:</strong> {complexityInfo.spaceComplexity || 'Not provided'}</p>
+                  </div>
+                ) : ""}
+              </div>
+            )}
+      </div>
+    </main>
   );
 }
