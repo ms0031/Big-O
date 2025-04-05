@@ -27,20 +27,58 @@ export default function Home() {
     setComplexityInfo(null);
     
     try {
+      // Create an AbortController to handle timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ question: enhancedQuestion }),
+        signal: controller.signal
       });
       
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
       
       const data = await response.json();
-      const content = data.choices[0]?.message?.content || 'No response received';
+      
+      // Check for OpenRouter error format in the response
+      if (data.error) {
+        const errorCode = data.error.code;
+        const errorMessage = data.error.message;
+        
+        // Handle specific error codes with user-friendly messages
+        switch (errorCode) {
+          case 400:
+            throw new Error('Invalid request parameters. Please check your input.');
+          case 401:
+            throw new Error('Authentication error. Please try again later.');
+          case 402:
+            throw new Error('Insufficient credits for this request.');
+          case 403:
+            throw new Error('Your input was flagged by content moderation.');
+          case 408:
+            throw new Error('Request timed out. Please try again or simplify your question.');
+          case 429:
+            throw new Error('Too many requests. Please try again in a moment.');
+          case 502:
+            throw new Error('The AI model is currently unavailable. Please try again later.');
+          case 503:
+            throw new Error('No available model provider. Please try again later.');
+          default:
+            throw new Error(`Error: ${errorMessage || 'Unknown error occurred'}`);
+        }
+      }
+      
+      if (!response.ok) {
+        throw new Error(`Failed to get response: ${response.status}`);
+      }
+      
+      const content = data.choices?.[0]?.message?.content || 'No response received';
+      console.log('Response from OpenRouter:', data);
       
       // Try to extract JSON complexity info from the response
       try {
@@ -70,7 +108,12 @@ export default function Home() {
       }
     } catch (err) {
       console.error('Error:', err);
-      setError('Failed to get a response. Please try again.');
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Request timed out. Please try again or simplify your question.');
+      } else {
+        // Use the error message from our custom error handling
+        setError(err instanceof Error ? err.message : 'Failed to get a response. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +169,7 @@ export default function Home() {
             {complexityInfo && (
           <div className={`mt-4 w-full ${complexityInfo.response ? "bg-white/40" : "bg-red-400"} p-4 rounded-3xl pt-4`}>
             <h3 className={`mx-2 text-black text-2xl font-semibold mb-2`}>
-                  {complexityInfo.response ? 'Complexity Analysis:' : 'Error Try Again ...'}
+                  {complexityInfo.response ? 'Complexity Analysis:' : 'Error:  please provide correct code snippet!!'}
                 </h3>
                 {complexityInfo.response ? (
                   <div className='flex-col bg-red-100 rounded-2xl p-4'>

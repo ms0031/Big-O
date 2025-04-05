@@ -1,46 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAIResponse } from '@/services/openRouterService';
 
 export async function POST(request: NextRequest) {
   try {
-    const { question } = await request.json();
+    // Parse the request body
+    const body = await request.json();
+    const { question } = body;
     
-    if (!question) {
-      return NextResponse.json({ error: 'Question is required' }, { status: 400 });
-    }
-
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "",
-        "X-Title": process.env.NEXT_PUBLIC_SITE_NAME || "",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        "model": "deepseek/deepseek-chat-v3-0324:free",
-        "messages": [
-          {
-            "role": "user",
-            "content": question
-          }
-        ]
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
+    // Validate input
+    if (!question || typeof question !== 'string') {
       return NextResponse.json(
-        { error: 'Failed to get response from AI', details: errorData }, 
-        { status: response.status }
+        { error: 'Question is required and must be a string' },
+        { status: 400 }
       );
     }
-
-    const data = await response.json();
-    return NextResponse.json(data);
+    
+    // Call the service function
+    const aiResponse = await getAIResponse(question);
+    
+    // Return the response
+    return NextResponse.json(aiResponse);
   } catch (error) {
-    console.error('Error processing request:', error);
+    console.error('Error in chat API route:', error);
     return NextResponse.json(
-      { error: 'Internal server error' }, 
+      { error: 'Failed to get AI response' },
       { status: 500 }
     );
   }

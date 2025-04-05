@@ -18,11 +18,12 @@ export async function getAIResponse(userQuestion: string) {
           ]
         })
       });
-  
+
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorData = await response.json().catch(() => null);
+        throw new Error(`API error: ${response.status} ${errorData ? JSON.stringify(errorData) : ''}`);
       }
-  
+
       return await response.json();
     } catch (error) {
       console.error("Error fetching AI response:", error);
