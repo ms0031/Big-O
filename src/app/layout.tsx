@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Metadata } from 'next';
-
+import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: 'Big O Analyzer',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/Bigo-2.png', // Updated to match the actual image name
         width: 1200,
         height: 630,
         alt: 'Big O Analyzer',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Big O Analyzer - Code Complexity Analysis Tool',
     description: 'Analyze the time and space complexity of your code snippets instantly',
-    images: ['/og-image.png'],
+    images: ['/Bigo-2.png'], // Updated to match the actual image name
   },
   robots: {
     index: true,
@@ -44,7 +44,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Analytics/>
+      </body>
     </html>
   );
 }
