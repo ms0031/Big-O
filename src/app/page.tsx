@@ -150,8 +150,8 @@ export default function Home() {
                 setQuestion(e.target.value);
                 setFlag(true);
               }}
-              placeholder="Enter code snippet..."
-              className={`${flag ? 'field-sizing-content' : 'lg:h-36 h-50'} p-4 border-0
+              placeholder="// Insert your code snippet"
+              className={`${flag ? 'field-sizing-content' : 'lg:h-36 h-64'} p-4 border-0
  border-black bg-red-100 rounded-2xl resize-none text-black focus:outline-none focus:ring-2 focus:ring-red-400/75 focus:border-red-400/75 transition-all duration-200`}
               disabled={isLoading}
             />
@@ -174,7 +174,7 @@ export default function Home() {
         </form>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 text-2xl rounded-full mb-4">
             {error}
           </div>
         )}
