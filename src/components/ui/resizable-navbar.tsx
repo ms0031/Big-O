@@ -154,9 +154,9 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
         width: visible ? "90%" : "100%",
-        paddingRight: visible ? "12px" : "0px",
+        paddingRight: visible ? "12px" : "4px",
         paddingLeft: visible ? "12px" : "0px",
-        borderRadius: visible ? "2rem" : "1rem",
+        borderRadius: visible ? "2rem" : "2rem",
         y: visible ? 20 : 0,
       }}
       transition={{
@@ -259,7 +259,7 @@ export const NavbarButton = ({
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
-  variant?: "primary" | "secondary" | "dark" | "gradient" | "blue";
+  variant?: "primary" | "secondary" | "dark" | "gradient" | "blue" | "red";
 } & (
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
@@ -276,6 +276,8 @@ export const NavbarButton = ({
       "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
     blue:
       "bg-blue-400/80",
+    red:
+      "bg-red-400/85",
   };
 
   return (

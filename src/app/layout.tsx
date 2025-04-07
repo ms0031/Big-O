@@ -5,39 +5,21 @@ import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Big-O: Code Complexity Analysis Tool',
-  description: 'Analyze the time and space complexity of your code snippets instantly. Get accurate Big O notation analysis for your algorithms.',
-  keywords: 'big o notation, time complexity, space complexity, algorithm analysis, code complexity, algorithm efficiency',
-  authors: [{ name: 'Mayank Shekhar' }],
+  title: 'Big-O Complexity Analyzer',
+  description: 'Analyze the time and space complexity of your code snippets',
+  metadataBase: new URL('https://big-o-bot.vercel.app/'),
   openGraph: {
-    title: 'Big-O - Code Complexity Analysis Tool',
-    description: 'Analyze the time and space complexity of your code snippets instantly',
-    url: 'https://big-o-bot.vercel.app/',
-    siteName: 'Big O Analyzer',
-    images: [
-      {
-        // Make sure this exactly matches the case of your actual file
-        url: '/bigo-2.png', // Check if this should be lowercase
-        width: 1200,
-        height: 630,
-        alt: 'Big O Analyzer',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
+    title: 'Big-O Complexity Analyzer',
+    description: 'Analyze the time and space complexity of your code snippets',
+    images: ['/bigo-2.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Big O Analyzer - Code Complexity Analysis Tool',
-    description: 'Analyze the time and space complexity of your code snippets instantly',
-    // Make sure this exactly matches the case of your actual file
-    images: ['/bigo-2.png'], // Check if this should be lowercase
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+    title: 'Big-O Complexity Analyzer',
+    description: 'Analyze the time and space complexity of your code snippets',
+    images: ['/bigo-2.png'],
+  }
+}
 
 export default function RootLayout({
   children,

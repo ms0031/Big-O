@@ -151,7 +151,7 @@ export default function Home() {
                 setFlag(true);
               }}
               placeholder="Enter code snippet..."
-              className={`${flag ? 'field-sizing-content' : 'lg:h-36 h-48'} p-4 border-0
+              className={`${flag ? 'field-sizing-content' : 'lg:h-36 h-50'} p-4 border-0
  border-black bg-red-100 rounded-2xl resize-none text-black focus:outline-none focus:ring-2 focus:ring-red-400/75 focus:border-red-400/75 transition-all duration-200`}
               disabled={isLoading}
             />
