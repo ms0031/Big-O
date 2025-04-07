@@ -17,6 +17,7 @@ export function NavbarDemo() {
     {
       name: "Features",
       link: "/features",
+      prefetch: true,
     },
     {
       name: "About",
