@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { NavbarDemo } from './components/Navbar';
 import { useRef } from 'react';
+import { CoverDemo } from './components/Cover';
 export default function Home() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -18,7 +19,8 @@ export default function Home() {
     if (!question.trim()) return;
     
     // Add complexity request to the question
-    const enhancedQuestion = `${question}\n\nexplain the time complexity in json format {'response'='true/false','time-complexity'='','space-complexity'=''} and nothing else , response = 'true' if the answer is fetched else false`;
+    const enhancedQuestion = `${question}\n\nexplain the time complexity in json format {'response'='true/false','time-complexity'='','space-complexity'=''} and nothing else , response = 'true' if the answer is fetched else false 
+    and dont send object in the 'time-complexity' and 'space-complexity' the value for every key must be strictly string`;
     
     setIsLoading(true);
     setError('');
@@ -42,7 +44,7 @@ export default function Home() {
       clearTimeout(timeoutId);
       
       const data = await response.json();
-      
+      console.log('API Response:', data);
       // Check for OpenRouter error format in the response
       if (data.error) {
         const errorCode = data.error.code;
@@ -136,8 +138,11 @@ export default function Home() {
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between p-6 bg-red-300`}>
       <NavbarDemo />
-      <div className="my-38 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
-        <form onSubmit={handleSubmit} className="mt-8 w-full mb-8">
+      <div className='mt-26 mb-14'>
+        <CoverDemo />
+        </div>
+      <div className="lg:mb-24 mb-38 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
+        <form onSubmit={handleSubmit} className="w-full mb-8">
           <div className="flex flex-col gap-4  bg-white/40 bg-cover bg-center rounded-2xl p-4">
             <textarea
               value={question}
@@ -146,7 +151,7 @@ export default function Home() {
                 setFlag(true);
               }}
               placeholder="Enter code snippet..."
-              className={`${flag ? 'field-sizing-content' : 'h-90'} p-4 border-0
+              className={`${flag ? 'field-sizing-content' : 'lg:h-36 h-48'} p-4 border-0
  border-black bg-red-100 rounded-2xl resize-none text-black focus:outline-none focus:ring-2 focus:ring-red-400/75 focus:border-red-400/75 transition-all duration-200`}
               disabled={isLoading}
             />
