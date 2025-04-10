@@ -8,7 +8,6 @@ import { CoverDemo } from './components/Cover';
 export default function Home() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  // Change the initial state to include a default false value for response
   const [complexityInfo, setComplexityInfo] = useState<{response: boolean, timeComplexity: string, spaceComplexity: string} | null>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -83,7 +82,6 @@ export default function Home() {
         // Look for JSON pattern in the response
         const jsonMatch = content.match(/\{.*"response".*"time-complexity".*"space-complexity".*\}/);
         if (jsonMatch) {
-          // Replace single quotes with double quotes for valid JSON
           const jsonStr = jsonMatch[0].replace(/'/g, '"');
           const complexityData = JSON.parse(jsonStr);
           setComplexityInfo({
@@ -92,7 +90,6 @@ export default function Home() {
             spaceComplexity: complexityData['space-complexity']
           });
           
-          // Remove the JSON part from the answer
           const cleanAnswer = content.replace(jsonMatch[0], '').trim();
           setAnswer(cleanAnswer);
         } else {
@@ -107,18 +104,15 @@ export default function Home() {
       if (err instanceof DOMException && err.name === 'AbortError') {
         setError('Request timed out. Please try again or simplify your question.');
       } else {
-        // Use the error message from our custom error handling
         setError(err instanceof Error ? err.message : 'Failed to get a response. Please try again.');
       }
     } finally {
       setIsLoading(false);
     }
   };
-  // Add this useEffect to scroll to bottom when complexityInfo or answer changes
-  // Add a ref to track if this is the initial render
+
   const isInitialRender = useRef(true);
-  
-  // Modified useEffect to avoid scrolling on initial render/refresh
+ 
   useEffect(() => {
     // Skip scrolling on the initial render (page refresh)
     if (isInitialRender.current) {
@@ -136,13 +130,13 @@ export default function Home() {
   }, [complexityInfo, answer]);
   
   return (
-    <main className={`flex min-h-screen flex-col items-center justify-between p-6 bg-red-300`}>
+    <main className={`flex gap-20 min-h-screen flex-col items-center justify-evenly p-6 bg-red-300`}>
       <NavbarDemo />
-      <div className='mt-26 mb-14'>
+      <div className='flex justify-center items-center w-full mt-30'>
         <CoverDemo />
-        </div>
-      <div className="lg:mb-24 mb-38 z-10 max-w-5xl w-full justify-items-center items-center justify-between font-mono text-sm">
-        <form onSubmit={handleSubmit} className="w-full mb-8">
+      </div>
+      <div className="z-10 max-w-5xl w-full mb-10 justify-items-center items-center justify-between font-mono text-sm">
+        <form onSubmit={handleSubmit} className="w-full">
           <div className="flex flex-col gap-4  bg-white/40 bg-cover bg-center rounded-2xl p-4">
             <textarea
               value={question}
@@ -151,7 +145,7 @@ export default function Home() {
                 setFlag(true);
               }}
               placeholder="// Insert your code snippet"
-              className={`${flag ? 'field-sizing-content' : 'lg:h-36 h-64'} p-4 border-0
+              className={`${flag ? 'field-sizing-content' : 'h-28'} p-4 border-0
  border-black bg-red-100 rounded-2xl resize-none text-black focus:outline-none focus:ring-2 focus:ring-red-400/75 focus:border-red-400/75 transition-all duration-200`}
               disabled={isLoading}
             />
