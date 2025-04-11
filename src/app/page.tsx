@@ -43,7 +43,7 @@ export default function Home() {
       clearTimeout(timeoutId);
       
       const data = await response.json();
-      console.log('API Response:', data);
+      //console.log('API Response:', data);
       // Check for OpenRouter error format in the response
       if (data.error) {
         const errorCode = data.error.code;
