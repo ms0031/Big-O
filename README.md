@@ -1,7 +1,7 @@
-# [Big-O Complexity Analyzer](big-o-bot.vercel.app)
+# [Big-O Complexity Analyzer](https://big-o-bot.vercel.app)
 A web application that analyzes code snippets and determines their time and space complexity using AI technology.
 ## Demo 
-- link : [big-o-bot.vercel.app](big-o-bot.vercel.app)
+- link : [big-o-bot.vercel.app](https://big-o-bot.vercel.app)
 ## Features
 - Code Analysis : Submit code snippets to get instant time and space complexity analysis
 - Responsive Design : Works seamlessly across desktop and mobile devices
